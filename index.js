@@ -53,6 +53,25 @@ async function run() {
         res.send(result)
     })
 
+    // update player
+    app.put('/players/:id', async(req, res) => {
+        const id = req.params.id;
+        const player = req.body;
+
+        const filter = { _id: new ObjectId(id)};
+        const options = { upsert: true};
+        const updatedPlayer = {
+            $set: {
+                role: player.role,
+                name: player.name,
+                photo: player.photo
+            }
+        }
+
+        const result = await playerCollection.updateOne(filter, updatedPlayer, options);
+        res.send(result);
+    })
+
     // delete player
     app.delete('/players/:id', async(req, res) => {
         const id = req.params.id;
